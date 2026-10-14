@@ -1,0 +1,77 @@
+name: ZeptoMail
+description: Send a transactional email with Zoho ZeptoMail
+author: olusoladeboy
+branding:
+  icon: mail
+  color: orange
+
+inputs:
+  token:
+    description: ZeptoMail Send Mail Token (with or without the Zoho-enczapikey prefix)
+    required: true
+  from:
+    description: Verified sender address
+    required: true
+  from_name:
+    description: Sender display name
+    required: false
+    default: ''
+  to:
+    description: Recipient addresses, comma-separated
+    required: true
+  to_name:
+    description: Display name for a single recipient
+    required: false
+    default: ''
+  subject:
+    description: Email subject
+    required: true
+  htmlbody:
+    description: HTML body
+    required: false
+    default: ''
+  textbody:
+    description: Plain-text body
+    required: false
+    default: ''
+  cc:
+    description: CC addresses, comma-separated
+    required: false
+    default: ''
+  bcc:
+    description: BCC addresses, comma-separated
+    required: false
+    default: ''
+  reply_to:
+    description: Reply-To address
+    required: false
+    default: ''
+  api_url:
+    description: ZeptoMail send-mail endpoint
+    required: false
+    default: https://api.zeptomail.com/v1.1/email
+
+outputs:
+  response:
+    description: Raw JSON response from ZeptoMail
+    value: ${{ steps.send.outputs.response }}
+
+runs:
+  using: composite
+  steps:
+    - id: send
+      shell: python
+      env:
+        ZEPTOMAIL_TOKEN: ${{ inputs.token }}
+        ZEPTOMAIL_FROM: ${{ inputs.from }}
+        ZEPTOMAIL_FROM_NAME: ${{ inputs.from_name }}
+        ZEPTOMAIL_TO: ${{ inputs.to }}
+        ZEPTOMAIL_TO_NAME: ${{ inputs.to_name }}
+        ZEPTOMAIL_SUBJECT: ${{ inputs.subject }}
+        ZEPTOMAIL_HTMLBODY: ${{ inputs.htmlbody }}
+        ZEPTOMAIL_TEXTBODY: ${{ inputs.textbody }}
+        ZEPTOMAIL_CC: ${{ inputs.cc }}
+        ZEPTOMAIL_BCC: ${{ inputs.bcc }}
+        ZEPTOMAIL_REPLY_TO: ${{ inputs.reply_to }}
+        ZEPTOMAIL_API_URL: ${{ inputs.api_url }}
+      run: python "${{ github.action_path }}/send.py"
