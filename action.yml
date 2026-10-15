@@ -60,7 +60,7 @@ runs:
   using: composite
   steps:
     - id: send
-      shell: python
+      shell: bash
       env:
         ZEPTOMAIL_TOKEN: ${{ inputs.token }}
         ZEPTOMAIL_FROM: ${{ inputs.from }}
@@ -74,4 +74,4 @@ runs:
         ZEPTOMAIL_BCC: ${{ inputs.bcc }}
         ZEPTOMAIL_REPLY_TO: ${{ inputs.reply_to }}
         ZEPTOMAIL_API_URL: ${{ inputs.api_url }}
-      run: python "${{ github.action_path }}/send.py"
+      run: python3 "${{ github.action_path }}/send.py"
